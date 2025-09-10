@@ -120,10 +120,29 @@ const updatePedidoStatus = async (req, res) => {
     res.status(500).json({ error: "Erro ao atualizar status" });
   }
 };
+const deletePedido = async (req, res) => {
+  try {
+    const db = req.app.locals.db();
+    const { id } = req.params;
+
+    const result = await db
+      .collection("pedidos")
+      .deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Pedido nao encontrado" });
+    }
+
+    res.json({ message: "Pedido deletado com sucesso" });
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao deletar pedido" });
+  }
+};
 
 module.exports = {
   getPedidos,
   createPedido,
   updatePedido,
   updatePedidoStatus,
+  deletePedido,
 };

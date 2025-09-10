@@ -7,7 +7,6 @@ router.get("/", pedidosController.getPedidos);
 router.post("/", authenticateToken, pedidosController.createPedido);
 router.put("/:id", authenticateToken, pedidosController.updatePedido);
 router.patch("/:id/status", pedidosController.updatePedidoStatus);
+router.delete("/:id", authenticateToken, pedidosController.deletePedido);
 
 module.exports = router;
-
-

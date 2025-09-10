@@ -44,6 +44,6 @@ const authRoutes = require("./routes/auth.routes");
 const productsRoutes = require("./routes/products.routes");
 const reportsRoutes = require("./routes/reports.routes");
 
-app.use("/api/login", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/pedidos", productsRoutes);
 app.use("/api", reportsRoutes);
