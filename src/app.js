@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -12,8 +13,6 @@ app.use(express.json());
 
 // MongoDB connection
 let db;
-const MONGODB_URI =
-  "mongodb+srv://vitordsb2019_db_user:ycPzzCJVIu38mqOv@cluster0.tn4hbrg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
   .then((client) => {
