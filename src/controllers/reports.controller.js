@@ -4,21 +4,22 @@ const getRelatorioCompras = async (req, res) => {
     const produtos = await db
       .collection("produtos")
       .aggregate([
-        // Relaciona produto com seu pedido
         {
           $lookup: {
             from: "pedidos",
-            localField: "pedidoId",
-            foreignField: "_id", // cuidado: se você salvou pedidoId como string, mude para string também
+            let: { pedidoIdStr: { $toString: "$pedidoId" } }, // converte para string
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: [{ $toString: "$_id" }, "$$pedidoIdStr"] },
+                },
+              },
+            ],
             as: "pedido",
           },
         },
         { $unwind: "$pedido" },
-
-        // Só pedidos que ainda não saíram
-        { $match: { "pedido.dataSaida": { $exists: false } } },
-
-        // Agrupa produtos dos pedidos ativos
+        { $match: { "pedido.dataSaida": { $exists: false } } }, // só pedidos ativos
         {
           $group: {
             _id: "$nome",
