@@ -51,7 +51,7 @@ const addProductToPedido = async (req, res) => {
 const deleteProductToPedido = async (req, res) => {
   try {
     const db = req.app.locals.db();
-    const { id, productId } = req.params; // <-- pega os dois params
+    const { id, productId } = req.params; // pega id do pedido e id do produto
 
     // Valida IDs
     if (!ObjectId.isValid(productId)) {
@@ -61,7 +61,7 @@ const deleteProductToPedido = async (req, res) => {
       return res.status(400).json({ error: "ID do pedido inválido" });
     }
 
-    // Garante que está deletando apenas o produto dentro do pedido correto
+    // Deleta produto vinculado ao pedido
     const result = await db.collection("produtos").deleteOne({
       _id: new ObjectId(productId),
       pedidoId: id,
