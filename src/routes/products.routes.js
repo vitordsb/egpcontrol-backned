@@ -12,7 +12,7 @@ router.post(
 router.delete(
   "/:id/produtos/:productId",
   authenticateToken,
-  productsController.removeProductFromPedido,
+  productsController.deleteProductToPedido,
 );
 
 module.exports = router;
