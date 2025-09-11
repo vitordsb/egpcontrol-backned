@@ -44,3 +44,5 @@ const getRelatorioCompras = async (req, res) => {
     res.status(500).json({ error: "Erro ao gerar relatório de compras" });
   }
 };
+
+export default { getRelatorioCompras };
