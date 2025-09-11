@@ -30,5 +30,3 @@ const getRelatorioCompras = async (req, res) => {
 };
 
 module.exports = { getRelatorioCompras };
-
-

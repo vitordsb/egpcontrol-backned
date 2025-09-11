@@ -14,5 +14,3 @@ const calcularStatus = (dataPrevista, dataSaida) => {
 };
 
 module.exports = { calcularStatus };
-
-
