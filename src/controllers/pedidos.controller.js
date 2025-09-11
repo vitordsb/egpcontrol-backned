@@ -1,5 +1,5 @@
-const { ObjectId } = require("mongodb");
-const { calcularStatus } = require("../utils/status");
+import { ObjectId } from "mongodb";
+import { calcularStatus } from "../utils/status.js";
 
 const getPedidos = async (req, res) => {
   try {
@@ -139,7 +139,7 @@ const deletePedido = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getPedidos,
   createPedido,
   updatePedido,

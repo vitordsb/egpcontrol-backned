@@ -1,16 +1,24 @@
-const calcularStatus = (dataPrevista, dataSaida) => {
-  if (dataSaida) {
-    return `Saiu na data ${new Date(dataSaida).toLocaleDateString("pt-BR")}`;
-  }
+export const calcularStatus = (dataPrevista, dataSaida) => {
+  try {
+    if (dataSaida) {
+      const saida = new Date(dataSaida);
+      return `Saiu na data ${saida.toLocaleDateString("pt-BR")}`;
+    }
 
-  const hoje = new Date();
-  const previsao = new Date(dataPrevista);
+    if (!dataPrevista) {
+      return "Data prevista não informada";
+    }
 
-  if (hoje < previsao) {
-    return "Em produção";
-  } else {
-    return "Em atraso";
+    const hoje = new Date();
+    const previsao = new Date(dataPrevista);
+
+    if (isNaN(previsao)) {
+      return "Data prevista inválida";
+    }
+
+    return hoje < previsao ? "Em produção" : "Em atraso";
+  } catch (error) {
+    console.error("Erro ao calcular status:", error);
+    return "Erro ao calcular status";
   }
 };
-
-module.exports = { calcularStatus };

@@ -25,8 +25,9 @@ const getRelatorioCompras = async (req, res) => {
 
     res.json(produtos);
   } catch (error) {
+    console.error("Erro ao gerar relatório de compras:", error);
     res.status(500).json({ error: "Erro ao gerar relatório de compras" });
   }
 };
 
-module.exports = { getRelatorioCompras };
+export default { getRelatorioCompras };

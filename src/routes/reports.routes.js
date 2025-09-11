@@ -1,7 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const reportsController = require("../controllers/reports.controller");
+import { Router } from "express";
+import reportsController from "../controllers/reports.controller.js";
+
+const router = Router();
 
 router.get("/relatorio-compras", reportsController.getRelatorioCompras);
 
-module.exports = router;
+export default router;

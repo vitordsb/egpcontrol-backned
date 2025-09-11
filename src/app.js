@@ -1,7 +1,14 @@
-const express = require("express");
-const cors = require("cors");
-const { MongoClient, ObjectId } = require("mongodb");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import { MongoClient, ObjectId } from "mongodb";
+import dotenv from "dotenv";
+
+import pedidosRoutes from "./routes/pedidos.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import productsRoutes from "./routes/products.routes.js";
+import reportsRoutes from "./routes/reports.routes.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,19 +38,13 @@ MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
 app.locals.db = () => db;
 app.locals.ObjectId = ObjectId;
 
-// Routes will be imported here later
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
-const pedidosRoutes = require("./routes/pedidos.routes");
+// Rotas
 app.use("/api/pedidos", pedidosRoutes);
-
-const authRoutes = require("./routes/auth.routes");
-const productsRoutes = require("./routes/products.routes");
-const reportsRoutes = require("./routes/reports.routes");
-
 app.use("/api/login", authRoutes);
 app.use("/api/pedidos", productsRoutes);
 app.use("/api", reportsRoutes);
+
+// Start server
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});

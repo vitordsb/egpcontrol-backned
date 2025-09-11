@@ -1,18 +1,21 @@
-const express = require("express");
-const router = express.Router();
-const productsController = require("../controllers/products.controller");
-const { authenticateToken } = require("../utils/auth");
+import { Router } from "express";
+import productsController from "../controllers/products.controller.js";
+import { authenticateToken } from "../utils/auth.js";
+
+const router = Router();
 
 router.get("/:id/produtos", productsController.getProductsByPedidoId);
+
 router.post(
   "/:id/produtos",
   authenticateToken,
   productsController.addProductToPedido,
 );
+
 router.delete(
   "/:id/produtos/:productId",
   authenticateToken,
   productsController.deleteProductToPedido,
 );
 
-module.exports = router;
+export default router;
