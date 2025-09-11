@@ -4,6 +4,21 @@ const getRelatorioCompras = async (req, res) => {
     const produtos = await db
       .collection("produtos")
       .aggregate([
+        // Relaciona produto com seu pedido
+        {
+          $lookup: {
+            from: "pedidos",
+            localField: "pedidoId",
+            foreignField: "_id", // cuidado: se você salvou pedidoId como string, mude para string também
+            as: "pedido",
+          },
+        },
+        { $unwind: "$pedido" },
+
+        // Só pedidos que ainda não saíram
+        { $match: { "pedido.dataSaida": { $exists: false } } },
+
+        // Agrupa produtos dos pedidos ativos
         {
           $group: {
             _id: "$nome",
@@ -29,5 +44,3 @@ const getRelatorioCompras = async (req, res) => {
     res.status(500).json({ error: "Erro ao gerar relatório de compras" });
   }
 };
-
-export default { getRelatorioCompras };
