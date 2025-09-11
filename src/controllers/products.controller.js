@@ -37,7 +37,10 @@ const deleteProductToPedido = async (req, res) => {
     const { id } = req.params;
     const result = await db
       .collection("produtos")
-      .deleteOne({ _id: new ObjectId(id) });
+      .deleteOne({ _id: new ObjectId(String(id)) });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Produto nao encontrado" });
+    }
     res.json({ message: "Produto deletado com sucesso" });
   } catch (error) {
     res.status(500).json({ error: "Erro ao deletar produto" });
