@@ -15,6 +15,10 @@ const getProductsByPedidoId = async (req, res) => {
       .find({ pedidoId: new ObjectId(id) }) // id vem como string do params
       .toArray();
 
+    if (produtos.length === 0) {
+      return res.status(404).json({ error: "Nenhum produto encontrado" });
+    }
+
     res.json(produtos);
   } catch (error) {
     console.error("Erro ao buscar produtos:", error);
@@ -34,7 +38,7 @@ const addProductToPedido = async (req, res) => {
 
     const produto = {
       ...req.body,
-      pedidoId: id,
+      pedidoId: new ObjectId(id),
       dataCriacao: new Date(),
     };
 
@@ -64,7 +68,7 @@ const deleteProductToPedido = async (req, res) => {
     // Deleta produto vinculado ao pedido
     const result = await db.collection("produtos").deleteOne({
       _id: new ObjectId(productId),
-      pedidoId: id,
+      pedidoId: new ObjectId(id),
     });
 
     if (result.deletedCount === 0) {
