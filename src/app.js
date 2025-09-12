@@ -3,6 +3,7 @@ import cors from "cors";
 import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 
+import uploadRoutes from "./routes/upload.routes.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import productsRoutes from "./routes/products.routes.js";
@@ -43,6 +44,7 @@ app.use("/api/pedidos", pedidosRoutes);
 app.use("/api/login", authRoutes);
 app.use("/api/pedidos", productsRoutes);
 app.use("/api", reportsRoutes);
+app.use("/api/pedidos", uploadRoutes);
 
 // Start server
 app.listen(PORT, "0.0.0.0", () => {

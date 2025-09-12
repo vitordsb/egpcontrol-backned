@@ -12,7 +12,7 @@ const getProductsByPedidoId = async (req, res) => {
 
     const produtos = await db
       .collection("produtos")
-      .find({ pedidoId: id })
+      .find({ pedidoId: new ObjectId(id) }) // id vem como string do params
       .toArray();
 
     res.json(produtos);
