@@ -32,7 +32,6 @@ const getPedidos = async (req, res) => {
     const pedidos = await db
       .collection("pedidos")
       .find(filter)
-      .sort({ dataPedido: -1 })
       .skip(skip)
       .limit(parseInt(limit))
       .toArray();
