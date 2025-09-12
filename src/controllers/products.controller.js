@@ -64,7 +64,7 @@ const deleteProductToPedido = async (req, res) => {
     // Deleta produto vinculado ao pedido
     const result = await db.collection("produtos").deleteOne({
       _id: new ObjectId(productId),
-      pedidoId: { $in: [id, new ObjectId(id)] },
+      pedidoId: id,
     });
 
     if (result.deletedCount === 0) {

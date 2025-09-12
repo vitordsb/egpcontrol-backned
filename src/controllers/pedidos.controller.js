@@ -125,20 +125,24 @@ const deletePedido = async (req, res) => {
     const db = req.app.locals.db();
     const { id } = req.params;
 
-    const result = await db
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "ID inválido" });
+    }
+    const pedidoResult = await db
       .collection("pedidos")
       .deleteOne({ _id: new ObjectId(id) });
-
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Pedido nao encontrado" });
+    if (pedidoResult.deletedCount === 0) {
+      return res.status(404).json({ error: "Pedido não encontrado" });
     }
-
-    res.json({ message: "Pedido deletado com sucesso" });
+    await db.collection("produtos").deleteMany({ pedidoId: id });
+    res.json({
+      message: "Pedido e produtos relacionados deletados com sucesso",
+    });
   } catch (error) {
+    console.error("Erro ao deletar pedido:", error);
     res.status(500).json({ error: "Erro ao deletar pedido" });
   }
 };
-
 export default {
   getPedidos,
   createPedido,
