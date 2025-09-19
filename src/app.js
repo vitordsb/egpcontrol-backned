@@ -8,6 +8,7 @@ import pedidosRoutes from "./routes/pedidos.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import productsRoutes from "./routes/products.routes.js";
 import reportsRoutes from "./routes/reports.routes.js";
+import estoqueRoutes from "./routes/estoque.routes.js";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use("/api/login", authRoutes);
 app.use("/api/pedidos", productsRoutes);
 app.use("/api", reportsRoutes);
 app.use("/api/pedidos", uploadRoutes);
+app.use("/api/estoque", estoqueRoutes);
 
 // Start server
 app.listen(PORT, "0.0.0.0", () => {

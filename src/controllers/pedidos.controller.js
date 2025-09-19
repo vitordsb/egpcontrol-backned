@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { calcularStatus } from "../utils/status.js";
 
+import estoqueController from "./estoque.controller.js";
 const getPedidos = async (req, res) => {
   try {
     const db = req.app.locals.db();
@@ -99,23 +100,35 @@ const updatePedidoStatus = async (req, res) => {
     const { id } = req.params;
     const { dataSaida, observacao } = req.body;
 
-    const updateData = {
-      dataSaida: dataSaida
-        ? new Date(dataSaida.split("/").reverse().join("-"))
-        : undefined,
-      observacao,
-    };
-
-    const result = await db
+    const pedido = await db
       .collection("pedidos")
-      .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
-
-    if (result.matchedCount === 0) {
+      .findOne({ _id: new ObjectId(id) });
+    if (!pedido)
       return res.status(404).json({ error: "Pedido não encontrado" });
+
+    // atualiza o pedido
+    await db.collection("pedidos").updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          dataSaida: new Date(dataSaida.split("/").reverse().join("-")),
+          observacao,
+        },
+      },
+    );
+
+    // debita estoque (todos os produtos do pedido)
+    const produtos = await db
+      .collection("produtos")
+      .find({ pedidoId: new ObjectId(id) })
+      .toArray();
+    for (const prod of produtos) {
+      await estoqueController.debitarEstoque(prod.nome, prod.quantidade, db);
     }
 
-    res.json({ message: "Status atualizado com sucesso" });
+    res.json({ message: "Status atualizado e estoque debitado" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Erro ao atualizar status" });
   }
 };
